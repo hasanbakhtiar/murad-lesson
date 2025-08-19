@@ -12,6 +12,12 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocs = require('./swagger');
+
+app.use('/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+
 // static access start
 const { staticAccess } = require('./middlewares/staticAccess');
 app.use(staticAccess);
@@ -22,15 +28,15 @@ app.use(staticAccess);
 const authRoute = require('./routes/auth');
 app.use('/', authRoute);
 
-const authAccess = require('./middlewares/auth');
-app.use(authAccess);
+// const authAccess = require('./middlewares/auth');
+// app.use(authAccess);
 
 const productRoute = require('./routes/product');
 const categoryRoute = require('./routes/category');
 const userRoute = require('./routes/user');
 
-const adminAccess = require('./middlewares/isAdmin');
-app.use(adminAccess);
+// const adminAccess = require('./middlewares/isAdmin');
+// app.use(adminAccess);
 
 app.use('/user', userRoute);
 app.use('/product', productRoute);
