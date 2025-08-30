@@ -8,11 +8,11 @@ const userSchema = mongoose.Schema(
     email: String,
     phone: String,
     password: String,
-    role:{
-      type:String,
-      enum:['admin','moderator','user'],
-      default:'user'
-    }
+    role: {
+      type: String,
+      enum: ['admin', 'moderator', 'user'],
+      default: 'user',
+    },
   },
   { timestamps: true }
 );
@@ -23,26 +23,26 @@ const userValidate = (user) => {
     email: Joi.string(),
     phone: Joi.string(),
     password: Joi.string(),
-    role:Joi.string()
+    role: Joi.string(),
   });
   return schema.validate(user);
 };
 
-
-userSchema.methods.createAuthToken = function(){
-  const decodeedToken = jwt.sign({
-    _id:this._id,
-    fullname:this.fullname,
-    email:this.email,
-    phone:this.phone,
-    role: this.role
-  },"jwtPrivateKey");
+userSchema.methods.createAuthToken = function () {
+  const decodeedToken = jwt.sign(
+    {
+      _id: this._id,
+      fullname: this.fullname,
+      email: this.email,
+      phone: this.phone,
+      role: this.role,
+    },
+    'jwtPrivateKey',
+    { expiresIn: '15m' }
+  );
 
   return decodeedToken;
-
-}
-
-
+};
 
 const User = mongoose.model('User', userSchema);
 module.exports = { User, userValidate };

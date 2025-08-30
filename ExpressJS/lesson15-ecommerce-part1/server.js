@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-
+require('dotenv').config();
 const cors = require('cors');
 const connectdb = require('./config/connectdb');
 
@@ -24,6 +24,13 @@ const swaggerDocs = require('./swagger');
 
 app.use('/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+
+const session = require('express-session');
+const passport = require('passport');
+
+app.use(session({ secret: 'cats', resave: false, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 //=======================Surface Routers Start=======================
